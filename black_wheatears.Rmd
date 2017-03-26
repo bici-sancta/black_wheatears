@@ -26,7 +26,8 @@ setwd(HOME_DIR)
 setwd(DATA_DIR)
 
 df_bw <- read.csv("ex0727.csv", stringsAsFactors = FALSE)
-df_bw__overest_dist <- read.csv("ex0729.csv", stringsAsFactors = FALSE)
+
+df_bw_overest_dist <- read.csv("ex0729.csv", stringsAsFactors = FALSE)
 
 names(df_bw) <- tolower(names(df_bw))
 
@@ -54,7 +55,7 @@ lines(fit_all$fitted.values ~ df_bw$mass, col = 'black', lwd = 4, lty = 3)
 lines(df_bw_conf_int$lwr ~ df_bw$mass, col = 'black', lwd = 1)
 lines(df_bw_conf_int$upr ~ df_bw$mass, col = 'black', lwd = 1)
 
-points(df_bw$tcell ~ df_bw$mass, col = 'blue', pch = 19, ylim = c(0, 0.6))
+points(df_bw$tcell ~ df_bw$mass, col = 'blue', pch = 19)
 
 df_bw_pred_int <- as.data.frame(predict(fit_all, df_bw, interval = "predict"))
 
@@ -353,6 +354,38 @@ abline(h = 0.3, col = "red")
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
 ix. Find the same calibration intervals analytically using the SE equations given in class and in the book (Version 3 page 194).    
+
+```{r}
+
+y_est <- 0.3
+x_at_y_est <- (y_est - b0) / b1
+
+x_at_y_est
+
+se_at_y_est <- predict(fit_all, data.frame(mass = x_at_y_est), se.fit = TRUE)
+
+se_ci_at_y_est <- se_at_y_est$se.fit / abs(b1)
+
+alpha <- 0.05
+dof <- dim(df_bw)[1] - 2
+crit_value <- qt(1 - alpha/2, dim(df_bw)[1] - 2)
+
+cal_est_at_y_est_upr <- x_at_y_est + crit_value * se_ci_at_y_est
+cal_est_at_y_est_lwr <- x_at_y_est - crit_value * se_ci_at_y_est
+
+
+# ...	calibration of predicted value
+
+res_std_dev <- sigma(fit_all) * sigma(fit_all)
+
+se_pi_at_y_est <- (sqrt (res_std_dev + se_at_y_est$se.fit * se_at_y_est$se.fit) ) / abs(b1)
+
+cal_pi_est_at_y_est_upr <- x_at_y_est + crit_value * se_pi_at_y_est
+cal_pi_est_at_y_est_lwr <- x_at_y_est - crit_value * se_pi_at_y_est
+
+
+```
+
 
 
 
