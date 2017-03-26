@@ -42,8 +42,6 @@ hist(df_bw$tcell)
 
 plot(df_bw$tcell ~ df_bw$mass)
 
-
-
 r <- cor(df_bw$mass, df_bw$tcell)
 r2 <- r * r
 fit_all <- lm(tcell ~ mass, data = df_bw)
@@ -58,27 +56,31 @@ confint(fit_all, 'mass', level=0.95)
 ```
 
 
-
-
-
-
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
   
 ####95% CI for the expected number of tcell for a team with $100 million mass.  
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
 
 ```{r}
-predict(fit_all, data.frame(mass = 100) , interval = "confidence")
+df_bw_conf_int <- as.data.frame(predict(fit_all, df_bw , interval = "confidence"))
+
+plot(df_bw$tcell ~ df_bw$mass, col = 'blue', pch = 19, ylim = c(0, 0.6))
+lines(fit_all$fitted.values ~ df_bw$mass, col = 'darkgrey', lwd = 2)
+
+lines(df_bw_conf_int$lwr ~ df_bw$mass, col = 'black', lwd = 1)
+lines(df_bw_conf_int$upr ~ df_bw$mass, col = 'black', lwd = 1)
+
+polygon(c(df_bw$mass, rev(df_bw$mass)),
+		c(df_bw_conf_int$lwr, rev(df_bw_conf_int$upr)),col="lightgrey")
+points(df_bw$tcell ~ df_bw$mass, col = 'blue', pch = 19, ylim = c(0, 0.6))
+
+df_bw_pred_int <- as.data.frame(predict(fit_all, df_bw, interval = "predict"))
+
+lines(df_bw_pred_int$lwr ~ df_bw$mass, col = 'grey', lwd = 1, lty = 2)
+lines(df_bw_pred_int$upr ~ df_bw$mass, col = 'grey', lwd = 1, lty = 2)
 ```
 
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
-  
-####95% PI for the number of tcell for a team with $100 million mass.  Explain the difference between these two intervals. 
--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
 
-```{r}
-predict(fit_all, data.frame(mass = 100) , interval = "predict")
-```
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
   
 ####Explain the difference between these two intervals. 
