@@ -1,0 +1,94 @@
+---
+title: "Black WheatEars"
+author: "mcdevitt"
+date: "26 mars 2017"
+output:
+  html_document:
+    theme: united
+    highlight: tango
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Black WheatEars
+
+
+```{r read in data set, echo = FALSE}
+
+HOME_DIR <- "/home/mcdevitt/_smu/_src/black_wheatears"
+
+DATA_DIR <- "./data/"
+
+setwd(HOME_DIR)
+setwd(DATA_DIR)
+
+df_bw <- read.csv("ex0727.csv", stringsAsFactors = FALSE)
+df_bw__overest_dist <- read.csv("ex0729.csv", stringsAsFactors = FALSE)
+
+names(df_bw) <- tolower(names(df_bw))
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r plot, echo=FALSE}
+
+hist(df_bw$mass)
+hist(df_bw$tcell)
+
+plot(df_bw$tcell ~ df_bw$mass)
+
+
+
+r <- cor(df_bw$mass, df_bw$tcell)
+r2 <- r * r
+fit_all <- lm(tcell ~ mass, data = df_bw)
+
+print(sprintf("Correlation = %9.3f, r^2 = %9.3f", r, r2))
+
+plot(df_bw$tcell ~ df_bw$mass, col = 'blue', pch = 19)
+lines(fit_all$fitted.values ~ df_bw$mass, col = 'darkgrey', lwd = 2)
+
+summary(fit_all)
+confint(fit_all, 'mass', level=0.95)
+```
+
+
+
+
+
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
+  
+####95% CI for the expected number of tcell for a team with $100 million mass.  
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
+
+```{r}
+predict(fit_all, data.frame(mass = 100) , interval = "confidence")
+```
+
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
+  
+####95% PI for the number of tcell for a team with $100 million mass.  Explain the difference between these two intervals. 
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
+
+```{r}
+predict(fit_all, data.frame(mass = 100) , interval = "predict")
+```
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
+  
+####Explain the difference between these two intervals. 
+
+The confidence interval is the upper and lower bound for the expected mean value at the given indpendent value (e.g., mass = $100M) for the current regression relationship.
+
+The prediction interval is the upper and lower bound for an 'next' observation of dependent value at the givne independent value, based on the current regression relationshhip. That is to say, for an observation of mass and tcell not included in this analysis, the prediction interval bounds the range of future observations that are expected.  
+  
+  
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-  
+
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
