@@ -14,8 +14,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Black WheatEars
 
-![image from Francesco Veronesi - https://www.flickr.com/people/30818542@N04?rb=1](Black_Wheatear_-_Merzouga_Marocco_07_3429.jpg)
-
 ```{r read in data set, echo = FALSE}
 
 HOME_DIR <- "/home/mcdevitt/_smu/_src/black_wheatears"
@@ -27,18 +25,18 @@ setwd(DATA_DIR)
 
 df_bw <- read.csv("ex0727.csv", stringsAsFactors = FALSE)
 
-df_bw_overest_dist <- read.csv("ex0729.csv", stringsAsFactors = FALSE)
-
 names(df_bw) <- tolower(names(df_bw))
 
 ```
 
-### Homework 10 - Problem Set
+![image from Francesco Veronesi - https://www.flickr.com/people/30818542@N04?rb=1](Black_Wheatear_-_Merzouga_Marocco_07_3429.jpg)
+
+### Homework 10 - Problem Set 1 - Black Wheatears
 
 #### b. Analyze the data providing at least the following:    
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-i. A Scatterplot with confidence intervals of the regression line and prediction intervals of the regression line.  Please do in SAS and R!    
+__i. A Scatterplot with confidence intervals of the regression line and prediction intervals of the regression line.  Please do in SAS and R!__    
 ```{r, echo = FALSE}
 
 
@@ -70,7 +68,7 @@ And the SAS plot ...
 
   
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-ii. A table showing the t-statistics and pvalues for the significance of the regression parameters: .   Please do in SAS and R!  
+__ii. A table showing the t-statistics and pvalues for the significance of the regression parameters: .   Please do in SAS and R!__  
 
 ```{r plot, echo=FALSE}
 
@@ -84,7 +82,7 @@ And the SAS table ...
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-iii. Using the data in ii show all 6 steps of each hypothesis test.   
+__iii. Using the data in ii show all 6 steps of each hypothesis test.__   
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
 
 ##### __Six-Step Hypothesis Test - Slope__   
@@ -165,7 +163,7 @@ print_cnf_intrvl <- paste0(sprintf("(%9.3f", cnf_intrvl_lwr), sprintf(", %9.3f)"
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-iv. The regression equation.  
+__iv. The regression equation.__    
 
 
 ``` {r, echo = FALSE}
@@ -176,18 +174,18 @@ b1 <- fit_all$coefficients[2]
 ```
 
 The Regression equation : 
-- Tcell = `r b1` * mass + `r b0`
+* Tcell = `r b1` * mass + `r b0`
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-v. Interpretation of the slope and intercept in the model (regression equation.)   
+__v. Interpretation of the slope and intercept in the model (regression equation.)__   
 
 ##### The slope represents the rate of change in Tcell estimated for a unit change in stone mass transported by this populations of birds sampled. I.e., for each increase in 1 gram of stone mass there is a corresponding increase in Tcell count of `r b1` 
 
 ##### The intercept represents the estimated average level of Tcell counts associated to a transported stone mass of 0 grams by this population of birds. From a practical point of view, since each bird evalauted did actually transport stones of some mass, the intercept provides an estimate of the lower bound of Tcell counts in this population of birds.
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-vi. Find and interpret the 95% confidence interval for the mean t-cell response conditional on a stone mass of 4.5 grams.  Please do in SAS and R!  
+__vi. Find and interpret the 95% confidence interval for the mean t-cell response conditional on a stone mass of 4.5 grams.  Please do in SAS and R!__  
 
 ``` {r, echo = FALSE} 
 
@@ -199,9 +197,6 @@ print_cnf_intrvl <- paste0(sprintf("(%9.3f", cnf_intrvl_lwr), sprintf(", %9.3f)"
 
 ```
 
-And the SAS table ...
-
-![Tcell vs. Stone Mass from SAS PROC REG](SAS_conf_pred_intervals.png)
 
 
 The confidence interval is the upper and lower bound for the expected mean value at the given indpendent value (e.g., mass = 4.5 grams) for the current regression relationship.
@@ -209,7 +204,7 @@ The confidence interval is the upper and lower bound for the expected mean value
 For this particular regression, the confidence interval at stone mass = 4.5 : Tcell count in the range `r print_cnf_intrvl`
   
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-vii. Find and interpret the 95% prediction interval for the predicted t-cell response given a stone mass of 4.5 grams.   Please do in SAS and R!  
+__vii. Find and interpret the 95% prediction interval for the predicted t-cell response given a stone mass of 4.5 grams.   Please do in SAS and R!__  
 
 
 ``` {r, echo = FALSE} 
@@ -227,10 +222,15 @@ The prediction interval is the upper and lower bound for an 'next' observation o
 
 For this particular case, the prediction interval at stone mass = 4.5 : Tcell count in the range `r print_prd_intrvl`
 
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
+
+__And the SAS table__ ...  
+
+![Tcell vs. Stone Mass from SAS PROC REG](SAS_conf_pred_intervals.png)
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-viii. Using the graphical method, find and interpret the calibration intervals for the t-cell response of 0.3. (Both for mean t-cell response and for a single t-cell response.   Please do in SAS and R!  (R: package investr)  
+__viii. Using the graphical method, find and interpret the calibration intervals for the t-cell response of 0.3. (Both for mean t-cell response and for a single t-cell response.   Please do in SAS and R!  (R: package investr)__  
 
 ``` {r, echo = FALSE}
 
@@ -351,9 +351,14 @@ lines(df_bw_pred_int$upr ~ df_mass$mass, col = 'grey', lwd = 1, lty = 2)
 abline(h = 0.3, col = "red")
 ```
 
+### The calibration estimates based on graphical inspection are as follows :  
+
+* calibration interval for the __mean__  response of 0.3  = (4, 7.6)  
+* calibration interval for __single point__ response of 0.3 = (-1.4, 13.2)  
+
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-ix. Find the same calibration intervals analytically using the SE equations given in class and in the book (Version 3 page 194).    
+__ix. Find the same calibration intervals analytically using the SE equations given in class and in the book (Version 3 page 194).__    
 
 ```{r}
 
@@ -386,11 +391,14 @@ cal_pi_est_at_y_est_lwr <- x_at_y_est - crit_value * se_pi_at_y_est
 
 ```
 
+### The calibration estimates are as follows :  
 
+* calibration interval for the __mean__  response of 0.3 = (`r cal_est_at_y_est_lwr`, `r cal_est_at_y_est_upr`)  
+* calibration interval for __single point__ response of 0.3 = (`r cal_pi_est_at_y_est_lwr`, `r cal_pi_est_at_y_est_upr`)  
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-x. A scatterplot of residuals.    Please do in SAS and R!  
+__x. A scatterplot of residuals.    Please do in SAS and R!__  
 
 ``` {r, echo = FALSE}
 
@@ -408,7 +416,7 @@ abline(0, 0)
 
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=--=-=-=-  
-xi. A histogram of residuals with normal distribution superimposed.  (from SAS).    
+__xi. A histogram of residuals with normal distribution superimposed.  (from SAS).__    
 
 
 ``` {r, echo = FALSE}
